@@ -16,9 +16,9 @@ public class UsersDAO {
 	
 	// データベース情報
 	// URL
-	private final String JDBC_URL = null;		// データベースのURL(ここではnullにしている)
-	private final String DB_USER = null;		// データベースアカウント(ここではnullにしている)
-	private final String DB_PASS = null;		// データベースのパスワード(ここではnullにしている)
+	private final String JDBC_URL = null;		// データベースのURL(ここではセキュリティの観点からnullにしている)
+	private final String DB_USER = null;		// データベースアカウント(ここではセキュリティの観点からnullにしている)
+	private final String DB_PASS = null;		// データベースのパスワード(ここではセキュリティの観点からnullにしている)
 	
 	/**
 	 * isUserメソッド
