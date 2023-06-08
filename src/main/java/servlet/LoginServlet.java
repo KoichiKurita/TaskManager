@@ -86,6 +86,7 @@ public class LoginServlet extends HttpServlet {
 		
 		} else {
 			// 入力チェックでエラーがない場合（エラーメッセージがない場合）
+			
 			// ログイン処理を実行する
 			LoginLogic loginLoginBo = new LoginLogic();
 			boolean resultLogin = loginLoginBo.execute(user);

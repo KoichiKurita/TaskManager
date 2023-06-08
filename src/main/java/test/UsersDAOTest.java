@@ -34,7 +34,7 @@ public class UsersDAOTest {
 		
 		User user = new User("kurita", "abcd1234");
 		UsersDAO dao = new UsersDAO();
-		boolean result = dao.isUser(user);
+		boolean result = dao.authenticateUser(user);
 		
 		if (result) {
 			System.out.println("testIsUserOK:成功しました");
@@ -52,7 +52,7 @@ public class UsersDAOTest {
 		
 		User user = new User("kurita", "abcd12345");
 		UsersDAO dao = new UsersDAO();
-		boolean result = dao.isUser(user);
+		boolean result = dao.authenticateUser(user);
 		
 		if (!result) {
 			System.out.println("testIsUserNG:成功しました");

@@ -4,6 +4,8 @@
  */
 package dao;
 
+import static contents.AuthenticationInfo.*;	// DB認証情報
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,19 +16,57 @@ import model.User;
 
 public class UsersDAO {
 	
-	// データベース情報
-	// URL
-	private final String JDBC_URL = null;		// データベースのURL(ここではセキュリティの観点からnullにしている)
-	private final String DB_USER = null;		// データベースアカウント(ここではセキュリティの観点からnullにしている)
-	private final String DB_PASS = null;		// データベースのパスワード(ここではセキュリティの観点からnullにしている)
+	/**
+	 * checkUserメソッド
+	 * ユーザIDを使用し、ユーザ情報をデータベースから検索する
+	 * @param　ユーザID
+	 * @return 登録されているかどうか（true or false）
+	 */
+	public boolean checkUser(String userId) {
+		
+		// JDBCドライバ読み込み
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			throw new IllegalStateException("JDBCドライバを読み込めませんでした");
+		}
+		
+		// データベースに接続（データベースの切断はプログラム終了時に自動で実行される）
+		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+			
+			// SELECT文を準備
+			String sql = "SELECT * FROM users WHERE user_id = ?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			
+			// プレースホルダーに入れる値を挿入してSELECT文を完成させる(SQLインジェクション対策)
+			pStmt.setString(1, userId);
+			
+			// SELECT文を実行し、結果票を取得
+			ResultSet rs = pStmt.executeQuery();
+			
+			if (rs.next()) {
+				// ユーザ情報の検索結果がある場合
+				return true;
+			} 
+			
+		} catch (SQLException e) { // データベース処理中に例外が発生した場合、処理終了
+			System.out.println("SQLExceptionが発生しました");
+			System.out.println("処理を終了します");
+			e.printStackTrace();
+			return false;
+		}
+		
+		return false;
+	}
+	
 	
 	/**
-	 * isUserメソッド
-	 * ユーザ情報をデータベースから検索する
+	 * authenticateUserメソッド
+	 * ユーザID, パスワードを使用し、ユーザ情報をデータベースから検索する
 	 * @param　ユーザ情報
 	 * @return 登録されているかどうか（true or false）
 	 */
-	public boolean isUser(User user) {
+	public boolean authenticateUser(User user) {
 		
 		// JDBCドライバ読み込み
 		try {
@@ -44,7 +84,7 @@ public class UsersDAO {
 			
 			// プレースホルダーに入れる値を挿入してSELECT文を完成させる(SQLインジェクション対策)
 			pStmt.setString(1, user.getUserId());
-			pStmt.setString(2, user.getPassWord());
+			pStmt.setString(2, user.getHashedPassWord());
 			
 			// SELECT文を実行し、結果票を取得
 			ResultSet rs = pStmt.executeQuery();
@@ -82,7 +122,7 @@ public class UsersDAO {
 		
 		// データベースに接続（データベースの切断はプログラム終了時に自動で実行される）
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
-				
+			
 			// ユーザー情報の検索結果がない場合、新規ユーザー登録を行う
 			// INSERT文を準備
 			String sql = "INSERT INTO users(user_id, pass_word) VALUES(?, ?)";
@@ -90,13 +130,15 @@ public class UsersDAO {
 			
 			// プレースホルダーに入れる値を挿入してINSERT文を完成させる
 			pStmt.setString(1, user.getUserId());
-			pStmt.setString(2, user.getPassWord());
+			pStmt.setString(2, user.getHashedPassWord());
 			
 			// INSERT文を実行
 			int result = pStmt.executeUpdate();
 			
 			if(result != 1) {	// 追加したデータが1件でない場合、登録処理終了
 				System.out.println("データベースへの登録件数が1件ではありませんでした");
+				System.out.println("処理を終了します");
+				
 				return false;
 			}
 			
@@ -136,7 +178,7 @@ public class UsersDAO {
 			
 			// プレースホルダーに入れる値を挿入してUPDATE文を完成させる
 			pStmt.setString(1, AfterEditUser.getUserId());
-			pStmt.setString(2, AfterEditUser.getPassWord());
+			pStmt.setString(2, AfterEditUser.getHashedPassWord());
 			pStmt.setString(3, beforeEditUserId);
 			
 			// UPDATE文を実行

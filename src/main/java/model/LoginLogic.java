@@ -16,7 +16,7 @@ public class LoginLogic {
 	 */
 	public boolean execute(User user) {
 		UsersDAO dao = new UsersDAO();
-		boolean result = dao.isUser(user);
+		boolean result = dao.authenticateUser(user);
 		return result;
 	}
 }

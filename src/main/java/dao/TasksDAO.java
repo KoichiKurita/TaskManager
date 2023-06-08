@@ -8,6 +8,8 @@
 
 package dao;
 
+import static contents.AuthenticationInfo.*;	// DB認証情報
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -19,12 +21,6 @@ import java.util.List;
 import model.Task;
 
 public class TasksDAO {
-
-	// データベース情報
-	// URL
-	private final String JDBC_URL = null;		// データベースのURL(ここではセキュリティの観点からnullにしている)
-	private final String DB_USER = null;		// データベースアカウント(ここではセキュリティの観点からnullにしている)
-	private final String DB_PASS = null;		// データベースのパスワード(ここではセキュリティの観点からnullにしている)
 	
 	/**
 	 * getAllTasksメソッド

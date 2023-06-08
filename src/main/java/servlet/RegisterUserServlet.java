@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import model.CheckUserLogic;
 import model.InputIdPwCheckLogic;
-import model.LoginLogic;
 import model.RegisterUserLogic;
 import model.User;
 
@@ -60,7 +60,7 @@ public class RegisterUserServlet extends HttpServlet {
 		} else if (action.equals("register")) {
 			
 			// ユーザ登録をリクエストしたとき			
-			// リクエストスコープに保存されたタスク情報を取得
+			// リクエストスコープに保存されたユーザ情報を取得
 			HttpSession session = request.getSession();
 			User registerUser = (User)session.getAttribute("registerUser");
 			
@@ -84,7 +84,7 @@ public class RegisterUserServlet extends HttpServlet {
 			}
 		}
 		
-		// registerUser.jspへフォワードする
+		// 指定されたページへフォワードする
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);
 		dispatcher.forward(request, response);
 	}
@@ -121,8 +121,8 @@ public class RegisterUserServlet extends HttpServlet {
 		} else {
 			// 入力チェックでエラーがない場合（エラーメッセージがない場合）
 			// 登録済みのユーザか確認する
-			LoginLogic LgnLgcBo = new LoginLogic();
-			boolean resultCheckUser = LgnLgcBo.execute(user);
+			CheckUserLogic ChkUsrLgcBo = new CheckUserLogic();
+			boolean resultCheckUser = ChkUsrLgcBo.execute(user.getUserId());
 			
 			// 入力されたユーザが登録済みかどうかで処理を分ける
 			if (resultCheckUser) {

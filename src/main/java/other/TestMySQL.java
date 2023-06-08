@@ -1,5 +1,7 @@
 package other;
 
+import static contents.AuthenticationInfo.*;	// DB認証情報
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,10 +16,6 @@ public class TestMySQL {
 	 */
 	public static void main(String[] args) {
 		// TODO 自動生成されたメソッド・スタブ
-		
-		final String JDBC_URL = "jdbc:mysql://localhost:3306/links_prog_exercise?useUnicode=true&characterEncoding=utf8";
-		final String DB_USER = "root";
-		final String DB_PASS = "";
 		
 		// JDBCドライバ読み込み
 		try {
