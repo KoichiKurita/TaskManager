@@ -1,0 +1,56 @@
+@charset "UTF-8";
+
+/*
+	style.css
+	cssスタイルシート
+ */
+
+/*
+	ボタンデザインの参考サイト：
+	https://markodenic.com/tools/buttons-generator/
+*/
+
+.task-contorol-btn {
+  min-width: 100px;
+  height: 35px;
+  color: #fff;
+  padding: 5px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  outline: none;
+  border-radius: 20px;
+}
+
+.task-contorol-btn:hover {
+	background: #fff;
+}
+
+#add-btn {
+  border: 2px solid #4433ff;
+  background: #4433ff;
+}
+
+#add-btn:hover {
+  color: #4433ff
+}
+
+#edit-btn {
+  border: 2px solid #57cc99;
+  background: #57cc99;
+}
+
+#edit-btn:hover {
+  color: #57cc99
+}
+
+#delete-btn {
+  border: 2px solid #d90429;
+  background: #d90429;
+}
+
+#delete-btn:hover {
+  color: #d90429
+}
