@@ -2,8 +2,13 @@
 <faceted-project>
   <runtime name="Tomcat9 (Java17)"/>
   <fixed facet="jst.web"/>
+<<<<<<< HEAD
   <fixed facet="java"/>
   <fixed facet="wst.jsdt.web"/>
+=======
+  <fixed facet="wst.jsdt.web"/>
+  <fixed facet="java"/>
+>>>>>>> branch 'master' of https://github.com/KoichiKurita/TaskManager.git
   <installed facet="java" version="17"/>
   <installed facet="jst.web" version="4.0"/>
   <installed facet="wst.jsdt.web" version="1.0"/>
