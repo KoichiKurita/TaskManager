@@ -200,6 +200,53 @@ public class UsersDAO {
 		return true;
 	}
 	
+	
+	/**
+	 * editPassWordメソッド
+	 * 既に登録されているユーザのパスワードを修正する
+	 * @param user 変更後のパスワードが含まれたユーザ情報
+	 * @return 修正結果
+	 */
+	public boolean editPassWord(User user) {
+		
+		// JDBCドライバ読み込み
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			throw new IllegalStateException("JDBCドライバを読み込めませんでした");
+		}
+		
+		// データベースに接続（データベースの切断はプログラム終了時に自動で実行される）
+		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+			
+			// UPDATE文を準備
+			String sql = "UPDATE users SET pass_word = ? WHERE user_id = ?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			
+			// プレースホルダーに入れる値を挿入してUPDATE文を完成させる
+			pStmt.setString(1, user.getHashedPassWord());
+			pStmt.setString(2, user.getUserId());
+			
+			// UPDATE文を実行
+			int result = pStmt.executeUpdate();
+			
+			if(result != 1) {	// 変更したデータが1件でない場合、登録処理終了
+				System.out.println("データベースへの変更件数が1件ではありませんでした");
+				System.out.println("処理を終了します");
+				return false;
+			}
+			
+		} catch (SQLException e) {	// データベース処理中に例外が発生した場合、処理終了
+			System.out.println("SQLExceptionが発生しました");
+			System.out.println("処理を終了します");
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+	
+	
 	/**
 	 * deleteUserメソッド
 	 * データベースから1件分のユーザ情報を削除する

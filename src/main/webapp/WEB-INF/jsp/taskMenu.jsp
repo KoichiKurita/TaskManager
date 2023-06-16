@@ -54,26 +54,31 @@
 				
 				<c:choose>
 					<c:when test="${5 <= task.daysLeft && task.daysLeft <= 10 }">
-						<td align="center" style="color: orange;"><c:out value="${task.daysLeft}" />日</td>
+						<td align="center" style="color: white; background-color: orange;"><c:out value="${task.daysLeft}" />日</td>
 					</c:when>
 					<c:when test="${0 <= task.daysLeft && task.daysLeft <= 5 }">
-						<td align="center" style="color: red;"><c:out value="${task.daysLeft}" />日</td>
+						<td align="center" style="color: white; background-color: red;"><c:out value="${task.daysLeft}" />日</td>
 					</c:when>
 					<c:when test="${task.daysLeft < 0}">
-						<td align="center" style="color: blue;"><c:out value="${task.daysLeft}" />日</td>
+						<td align="center" style="color: white; background-color: blue;"><c:out value="${task.daysLeft}" />日</td>
 					</c:when>
 					<c:otherwise>
 						<td align="center"><c:out value="${task.daysLeft}" />日</td>
 					</c:otherwise>
 				</c:choose>
 				
-				<td align="center">
-					<c:choose>
-						<c:when test="${task.priority == 'high'}">高</c:when>
-						<c:when test="${task.priority == 'middle'}">中</c:when>
-						<c:otherwise>低</c:otherwise>
-					</c:choose>
-				</td>
+				<c:choose>
+					<c:when test="${task.priority == 'high'}">
+						<td align="center" style="color: white; background-color: red;">高</td>
+					</c:when>
+					<c:when test="${task.priority == 'middle'}">
+						<td align="center" style="color: white; background-color: orange;">中</td>
+					</c:when>
+					<c:otherwise>
+						<td align="center" style="color: white; background-color: blue;">低</td>
+					</c:otherwise>
+				</c:choose>
+					
 				<td><button id="edit-btn" class="task-contorol-btn" onclick="location.href='EditTaskServlet?action=input&taskId=${task.taskId}'">編集</button></td>
 				<td><button id="delete-btn" class="task-contorol-btn" onclick="location.href='DeleteTaskServlet?action=confirm&taskId=${task.taskId}'">削除</button></td>
 			</tr>
@@ -88,7 +93,7 @@
 	<br><br>
 	
 	<p><a href="MainMenuServlet">メインメニューへ戻る</a></p>
-	<%-- <p><a href="UserMenuServlet">ユーザ管理メニューへ</a></p>--%>
+	<p><a href="UserMenuServlet">ユーザ管理メニューへ</a></p>
 	
 	<button onclick="location.href='LogoutServlet?action=confirm'">ログアウト</button>
 	

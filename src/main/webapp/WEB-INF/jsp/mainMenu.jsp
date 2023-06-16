@@ -20,7 +20,7 @@
 	
 	<ul>
 		<li><a href="TaskMenuServlet">タスク管理</a></li>
-		<%-- <li><a href="UserMenuServlet">ユーザ管理</a></li> --%>
+		<li><a href="UserMenuServlet">ユーザ管理</a></li>
 	</ul>
 	
 	<button onclick="location.href='LogoutServlet?action=confirm'">ログアウト</button>

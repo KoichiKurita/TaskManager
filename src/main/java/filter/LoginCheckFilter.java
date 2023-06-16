@@ -23,7 +23,7 @@ import model.User;
 /**
  * Servlet Filter implementation class LoginCheckFilter
  */
-@WebFilter(urlPatterns = {"/MainMenuServlet", "/TaskMenuServlet", "/UserMenuServlet", "/AddTaskServlet", "/DeleteTaskServlet", "/EditTaskServlet", "/EditUserServlet"})
+@WebFilter(urlPatterns = {"/MainMenuServlet", "/TaskMenuServlet", "/UserMenuServlet", "/AddTaskServlet", "/DeleteTaskServlet", "/EditTaskServlet", "/EditUserServlet", "/EditPassWordServlet"})
 public class LoginCheckFilter extends HttpFilter implements Filter {
        
     /**

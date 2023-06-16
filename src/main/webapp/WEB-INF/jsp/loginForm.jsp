@@ -20,12 +20,10 @@
 	<form action="LoginServlet" method="post">
 		<jsp:include page="userForm.jsp"></jsp:include>
 		
-		<%-- 入力されたユーザ情報が誤りがある場合 --%>
-		<c:if test="${errorMessages != null}" >
-			<c:forEach var="errorMessage" items="${errorMessages}" >
-				<c:if test="${ errorMessage.equals('※ユーザIDまたはパスワードが誤っております。') }" >
-					<span style="color: red;"><c:out value="${ errorMessage }" /></span><br>
-				</c:if>
+		<%-- 入力されたユーザ情報が誤りがある場合、エラーメッセージを表示する --%>
+		<c:if test="${errorMessageMap != null}" >
+			<c:forEach var="errorMessage" items="${errorMessageMap.get('loginError')}" >
+				<span style="color: red;"><c:out value="${ errorMessage }" /></span><br>
 			</c:forEach>
 		</c:if>
 		

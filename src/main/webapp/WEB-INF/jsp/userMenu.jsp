@@ -20,15 +20,17 @@
 	
 	<br>
 	
-	<h2>ユーザ情報変更</h2>
-	<button onclick="location.href='EditUserServlet?action=input'">変更</button>
+	<h2>パスワードの変更</h2>
+	<button onclick="location.href='EditPassWordServlet?action=input'">パスワード変更</button>
 	
 	<br><br>
 	
+	<%-- 
 	<h2>ユーザ情報削除</h2>
 	<button onclick="location.href='DeleteUserServlet'">削除</button>
 	
 	<br><br>
+	--%>
 	
 	<p><a href="MainMenuServlet">メインメニューへ戻る</a></p>
 	<p><a href="TaskMenuServlet">タスク管理メニューへ</a></p>

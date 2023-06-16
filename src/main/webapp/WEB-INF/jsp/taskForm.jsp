@@ -6,6 +6,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %>
 <%@ page import="model.Task" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="priorityData.jsp" %>
@@ -18,11 +19,14 @@
 	SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
 	// タスクの期限 形式はyyyy-MM-dd
-	String strDeadline = "";
+	String strDeadline = null;
 	
 	// タスクが存在する場合、タスクの期限を<input type="date">の形式(yyyy-MM-dd)に変換
 	if (task != null) {
 		strDeadline = f.format(task.getDeadline());
+	} else {
+		// タスクが存在しない場合、入力時点の日付を設定
+		strDeadline = f.format(new Date());
 	}
 %>
 
@@ -45,18 +49,9 @@
 
 <br>
 
-<%-- 【課題】期限を変換する --%>
-
 <label for="deadline">
 	期限：<br>
-	<c:choose>
-		<c:when test="${task != null}">
-			<input type="date" name="deadline" id="deadline" value="<%= strDeadline %>" min="2000-01-01" max="9999-12-31">
-		</c:when>
-		<c:otherwise>
-			<input type="date" name="deadline" id="deadline" value="2023-04-01" min="2000-01-01" max="9999-12-31">
-		</c:otherwise>
-	</c:choose>
+	<input type="date" name="deadline" id="deadline" value="<%= strDeadline %>" min="2000-01-01" max="9999-12-31" required>
 </label>
 
 <br><br>

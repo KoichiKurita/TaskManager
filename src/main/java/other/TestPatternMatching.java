@@ -93,6 +93,19 @@ public class TestPatternMatching {
 		} else {
 			System.out.println("ひらがななし");
 		}
+		
+		// 空白を含むかチェックする
+		// 判定パターン文字列
+		Pattern pSpace = Pattern.compile("\s+");
+		
+		// 文字列に空白を含むか判定
+		Matcher mSpaceUserId = pSpace.matcher(" 0Pt$Ngv4WNpuz@ePgHXx");
+		
+		if (mSpaceUserId.find()) {
+			System.out.println("空白あり");
+		} else {
+			System.out.println("空白なし");
+		}
 	}
 
 }

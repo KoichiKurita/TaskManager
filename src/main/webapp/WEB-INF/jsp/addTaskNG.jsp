@@ -23,7 +23,7 @@
 	<p><a href="AddTaskServlet?action=input">入力画面に戻る</a></p>
 	
 	<p><a href="TaskMenuServlet">タスク管理メニューへ戻る</a></p>
-	<%--  <p><a href="UserMenuServlet">ユーザ管理メニューへ</a></p> --%>
+	<p><a href="UserMenuServlet">ユーザ管理メニューへ</a></p>
 	<p><a href="MainMenuServlet">メインメニューへ</a></p>
 	
 	<%-- フッター  --%>

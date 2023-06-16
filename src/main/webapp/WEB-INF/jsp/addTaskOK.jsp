@@ -21,7 +21,7 @@
 	<jsp:include page="displayTaskInfo.jsp"></jsp:include>
 	
 	<p><a href="TaskMenuServlet">タスク管理メニューへ戻る</a></p>
-	<%-- <p><a href="UserMenuServlet">ユーザ管理メニューへ</a></p> --%>
+	<p><a href="UserMenuServlet">ユーザ管理メニューへ</a></p>
 	<p><a href="MainMenuServlet">メインメニューへ</a></p>
 	
 	<%-- フッター  --%>

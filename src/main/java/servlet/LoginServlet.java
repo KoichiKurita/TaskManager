@@ -7,6 +7,7 @@ package servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,7 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import model.InputIdPwCheckLogic;
+import model.EscapeCharacterLogic;
+import model.InputIdCheckLogic;
+import model.InputPwCheckLogic;
 import model.LoginLogic;
 import model.User;
 
@@ -61,22 +64,34 @@ public class LoginServlet extends HttpServlet {
 		String userId = request.getParameter("user-ID");
 		String passWord = request.getParameter("pass-word");
 		
+		// ユーザID, パスワードに含まれるHTML特殊文字をエスケープする
+		EscapeCharacterLogic ecpCharLgcBo = new EscapeCharacterLogic();
+		userId = ecpCharLgcBo.execute(userId);
+		passWord = ecpCharLgcBo.execute(passWord);
+		
 		// ユーザを生成
 		User user = new User(userId, passWord);
 		
-		// ユーザID, パスワードの入力チェックを行う
-		InputIdPwCheckLogic iptIdPwChkLogicBo = new InputIdPwCheckLogic();
-		ArrayList<String> errorMessages = iptIdPwChkLogicBo.execute(user.getUserId(), user.getPassWord());
+		// ユーザID, パスワードの入力チェックを行う		
+		InputIdCheckLogic iptIdChkLgcBo = new InputIdCheckLogic();
+		ArrayList<String> idErrorMessageList = iptIdChkLgcBo.execute(user.getUserId());
+		
+		InputPwCheckLogic iptPwChkLgcBo = new InputPwCheckLogic();
+		ArrayList<String> pwErrorMessageList = iptPwChkLgcBo.execute(user.getPassWord());
+		
+		HashMap<String, ArrayList<String>> errorMessageMap = new HashMap<>();
+		errorMessageMap.put("userId" ,idErrorMessageList);
+		errorMessageMap.put("passWord", pwErrorMessageList);
 		
 		// フォワード先
 		String forwardPath = null;
 		
 		// 入力チェックでエラーがない場合にのみデータベースでの検索を行い、処理のオーバーヘッドを減少させる
-		if (errorMessages.size() != 0) {
+		if (errorMessageMap.get("userId").size() != 0 || errorMessageMap.get("passWord").size() != 0) {
 			// 入力チェックでエラーがある場合（エラーメッセージがある場合）
 			
 			// リクエストスコープにエラーメッセージを保存
-			request.setAttribute("errorMessages", errorMessages);
+			request.setAttribute("errorMessageMap", errorMessageMap);
 			
 			// リクエストスコープにユーザ情報を保存する
 			request.setAttribute("loginUser", user);
@@ -106,10 +121,12 @@ public class LoginServlet extends HttpServlet {
 				// ログインに失敗した場合
 				
 				// エラーメッセージを生成
-				errorMessages.add("※ユーザIDまたはパスワードが誤っております。");
+				ArrayList<String> LoginErrorMessage = new ArrayList<>();
+				LoginErrorMessage.add("※ユーザIDまたはパスワードが誤っております。");
+				errorMessageMap.put("loginError", LoginErrorMessage);
 				
 				// リクエストスコープにエラーメッセージを保存
-				request.setAttribute("errorMessages", errorMessages);
+				request.setAttribute("errorMessageMap", errorMessageMap);
 				
 				// リクエストスコープにユーザ情報を保存する
 				request.setAttribute("loginUser", user);

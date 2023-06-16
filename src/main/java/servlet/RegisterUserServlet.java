@@ -7,6 +7,7 @@ package servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,7 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import model.CheckUserLogic;
-import model.InputIdPwCheckLogic;
+import model.EscapeCharacterLogic;
+import model.InputIdCheckLogic;
+import model.InputPwCheckLogic;
 import model.RegisterUserLogic;
 import model.User;
 
@@ -100,20 +103,43 @@ public class RegisterUserServlet extends HttpServlet {
 		// postされたユーザID, パスワードを取得
 		String userId = request.getParameter("user-ID");
 		String passWord = request.getParameter("pass-word");
+		String passWordConfirm = request.getParameter("pass-word-confirm");
 		
-		// ユーザを生成
-		User user = new User(userId, passWord);
+		// ユーザID, パスワードに含まれるHTML特殊文字をエスケープする
+		EscapeCharacterLogic ecpCharLgcBo = new EscapeCharacterLogic();
+		userId = ecpCharLgcBo.execute(userId);
+		passWord = ecpCharLgcBo.execute(passWord);
+		passWordConfirm = ecpCharLgcBo.execute(passWordConfirm);
 		
-		// ユーザID, パスワードの入力チェックを行う
-		InputIdPwCheckLogic iptIdPwChkLogicBo = new InputIdPwCheckLogic();
-		ArrayList<String> errorMessages = iptIdPwChkLogicBo.execute(user.getUserId(), user.getPassWord());
+		InputIdCheckLogic iptIdChkLgcBo = new InputIdCheckLogic();
+		ArrayList<String> idErrorMessageList = iptIdChkLgcBo.execute(userId);
+		
+		InputPwCheckLogic iptPwChkLgcBo = new InputPwCheckLogic();
+		ArrayList<String> pwErrorMessageList = iptPwChkLgcBo.execute(passWord);
+		ArrayList<String> pwConfirmErrorMessageList = iptPwChkLgcBo.execute(passWordConfirm);
+		
+		// パスワードと確認用パスワードが一致しているかチェックを行う
+		if (!(passWord.equals(passWordConfirm))){
+			// 正しくない場合、エラーメッセージを格納する
+			pwConfirmErrorMessageList.add("※パスワードが一致しません。");
+		}
+		
+		HashMap<String, ArrayList<String>> errorMessageMap = new HashMap<>();
+		errorMessageMap.put("userId" ,idErrorMessageList);
+		errorMessageMap.put("passWord", pwErrorMessageList);
+		errorMessageMap.put("passWordConfirm", pwConfirmErrorMessageList);
 		
 		// フォワード先
 		String forwardPath = null;
 		
 		// 入力チェックでエラーがない場合にのみデータベースでの検索を行い、処理のオーバーヘッドを減少させる
-		if (errorMessages.size() != 0) {
+		if (errorMessageMap.get("userId").size() != 0 || errorMessageMap.get("passWord").size() != 0 || errorMessageMap.get("passWordConfirm").size() != 0) {
 			// 入力チェックでエラーがある場合（エラーメッセージがある場合）	
+			
+			// リクエストスコープにユーザID, パスワード, 確認用パスワードを保存
+			request.setAttribute("requestUserId", userId);
+			request.setAttribute("requestPassWord", passWord);
+			request.setAttribute("requestPassWordConfirm", passWordConfirm);
 			
 			// registerUserForm.jspをフォワード先へ指定する
 			forwardPath = "WEB-INF/jsp/registerUserForm.jsp";
@@ -122,13 +148,20 @@ public class RegisterUserServlet extends HttpServlet {
 			// 入力チェックでエラーがない場合（エラーメッセージがない場合）
 			// 登録済みのユーザか確認する
 			CheckUserLogic ChkUsrLgcBo = new CheckUserLogic();
-			boolean resultCheckUser = ChkUsrLgcBo.execute(user.getUserId());
+			boolean resultCheckUser = ChkUsrLgcBo.execute(userId);
 			
 			// 入力されたユーザが登録済みかどうかで処理を分ける
 			if (resultCheckUser) {
 				// 既に登録されているユーザ情報の場合
 				// エラーメッセージ生成
-				errorMessages.add("※既に登録されているユーザです");				
+				ArrayList<String> existUserErrorMessage = new ArrayList<>();
+				existUserErrorMessage.add("※既に登録されているユーザです");
+				errorMessageMap.put("existUser", existUserErrorMessage);
+				
+				// リクエストスコープにユーザID, パスワード, 確認用パスワードを保存
+				request.setAttribute("requestUserId", userId);
+				request.setAttribute("requestPassWord", passWord);
+				request.setAttribute("requestPassWordConfirm", passWordConfirm);
 				
 				// registerUserForm.jspをフォワード先へ指定する
 				forwardPath = "WEB-INF/jsp/registerUserForm.jsp";
@@ -136,18 +169,28 @@ public class RegisterUserServlet extends HttpServlet {
 			} else {
 				// 未登録のユーザ情報の場合
 				
+				// ユーザを生成
+				User user = new User(userId, passWord);
+				
+				// セッションスコープにユーザ情報を保存
+				HttpSession session = request.getSession();
+				session.setAttribute("registerUser", user);
+				
+				// セッションスコープにユーザID, パスワード, 確認用パスワードを保存
+				session.setAttribute("sessionUserId", userId);
+				session.setAttribute("sessionPassWord", passWord);
+				session.setAttribute("sessionPassWordConfirm", passWordConfirm);
+				
 				// registerUserConfirm.jspをフォワード先へ指定する
 				forwardPath = "WEB-INF/jsp/registerUserConfirm.jsp";
 			}
 		}
 		
 		
-		// リクエストスコープにエラーメッセージを保存
-		request.setAttribute("errorMessages", errorMessages);
 		
-		// セッションスコープにユーザ情報を保存
-		HttpSession session = request.getSession();
-		session.setAttribute("registerUser", user);
+		// リクエストスコープにエラーメッセージを保存
+		request.setAttribute("errorMessageMap", errorMessageMap);
+		
 		
 		// 指定されたページへフォワード
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);

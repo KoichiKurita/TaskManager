@@ -51,28 +51,16 @@
 
 <c:choose>
 	<%-- 入力画面に初めてアクセスしたとき --%>
-	<c:when test="${errorMessages == null}" >
+	<c:when test="${errorMessageMap == null}" >
 		<span style="color: red;">※半角英数8文字以上50文字以下</span><br>
+		<span style="color: red;">※空白文字は利用不可</span><br>
 	</c:when>
 	
 	<%-- ユーザIDが登録できず、入力画面に戻ってきたとき --%>
 	<c:otherwise>
 		<%-- エラーメッセージがある場合は表示する --%>
-		<c:forEach var="errorMessage" items="${errorMessages}" >
-			<%-- 文字数に関するエラーメッセージ --%>
-			<c:choose>
-				<c:when test="${ errorMessage.equals('※ユーザIDは8文字以上で入力してください') }" >
-					<span style="color: red;"><c:out value="${ errorMessage }" /></span><br>
-				</c:when>
-				<c:when test="${ errorMessage.equals('※ユーザIDは50文字以下で入力してください') }" >
-					<span style="color: red;"><c:out value="${ errorMessage }" /></span><br>
-				</c:when>
-			</c:choose>
-			
-			<%-- 使用する文字に関するエラーメッセージ --%>
-			<c:if test="${ errorMessage.equals('※ユーザIDは半角英数記号で入力してください') }" >
-				<span style="color: red;"><c:out value="${ errorMessage }" /></span><br>
-			</c:if>
+		<c:forEach var="errorMessage" items="${errorMessageMap.get('userId')}" >
+			<span style="color: red;"><c:out value="${ errorMessage }" /></span><br>
 		</c:forEach>
 	</c:otherwise>
 </c:choose>
@@ -85,36 +73,18 @@
 
 <c:choose>
 	<%-- 入力画面に初めてアクセスしたとき --%>
-	<c:when test="${errorMessages == null}" >
+	<c:when test="${errorMessageMap == null}" >
 		<span style="color: red;">※半角英数記号8文字以上20文字以下</span><br>
 		<span style="color: red;">※半角、英数、記号はそれぞれ最低1文字ずつ使用してください</span><br>
 		<span style="color: red;">※使用可能な記号は !&quot;#$%&amp;&#39;()=-~^|&yen;`@{}[]+;*:&lt;&gt;,.?/_ です。</span><br>
-
+		<span style="color: red;">※空白文字は利用不可</span><br>
 	</c:when>
 	
 	<%-- ユーザIDが登録できず、入力画面に戻ってきたとき --%>
 	<c:otherwise>
 		<%-- エラーメッセージがある場合は表示する --%>
-		<c:forEach var="errorMessage" items="${errorMessages}" >
-			<%-- 文字数に関するエラーメッセージ --%>
-			<c:choose>
-				<c:when test="${ errorMessage.equals('※パスワードは8文字以上で入力してください') }" >
-					<span style="color: red;"><c:out value="${ errorMessage }" /></span><br>
-				</c:when>
-				<c:when test="${ errorMessage.equals('※パスワードは20文字以下で入力してください') }" >
-					<span style="color: red;"><c:out value="${ errorMessage }" /></span><br>
-				</c:when>
-			</c:choose>
-			
-			<%-- 使用する文字の種類に関するエラーメッセージ --%>
-			<c:if test="${ errorMessage.equals('※パスワードは半角英数記号で入力してください') }" >
-				<span style="color: red;"><c:out value="${ errorMessage }" /></span><br>
-			</c:if>
-			
-			<%-- 使用する文字の回数に関するエラーメッセージ --%>
-			<c:if test="${ errorMessage.equals('※パスワードは英字、数字、記号を各最低1回以上使用してください') }" >
-				<span style="color: red;"><c:out value="${ errorMessage }" /></span><br>
-			</c:if>
+		<c:forEach var="errorMessage" items="${errorMessageMap.get('passWord')}" >			
+			<span style="color: red;"><c:out value="${ errorMessage }" /></span><br>
 		</c:forEach>
 	</c:otherwise>
 </c:choose>

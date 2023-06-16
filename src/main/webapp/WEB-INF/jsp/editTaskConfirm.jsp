@@ -27,7 +27,7 @@
 	<br>
 	
 	<p><a href="TaskMenuServlet">タスク管理メニューへ戻る</a>（入力内容は破棄されます）</p>
-	<%-- <p><a href="UserMenuServlet">ユーザ管理メニューへ</a>（入力内容は破棄されます）</p> --%>
+	<p><a href="UserMenuServlet">ユーザ管理メニューへ</a>（入力内容は破棄されます）</p>
 	<p><a href="MainMenuServlet">メインメニューへ</a>（入力内容は破棄されます）</p>
 	
 	<%-- フッター  --%>

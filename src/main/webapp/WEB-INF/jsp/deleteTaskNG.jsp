@@ -23,7 +23,7 @@
 	<p><a href="DeleteTaskServlet?action=confirm&taskId=${task.taskId}">確認画面に戻る</a></p>
 	
 	<p><a href="TaskMenuServlet">タスク管理メニューへ戻る</a></p>
-	<%-- <p><a href="UserMenuServlet">ユーザ管理メニューへ</a></p> --%>
+	<p><a href="UserMenuServlet">ユーザ管理メニューへ</a></p>
 	<p><a href="MainMenuServlet">メインメニューへ</a></p>
 	
 	<%-- フッター  --%>

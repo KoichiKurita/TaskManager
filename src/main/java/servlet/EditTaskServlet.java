@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import model.EditTaskLogic;
+import model.EscapeCharacterLogic;
 import model.GetTaskLogic;
 import model.InputTaskCheckLogic;
 import model.Task;
@@ -122,6 +123,11 @@ public class EditTaskServlet extends HttpServlet {
 		String contents = request.getParameter("contents");
 		String strDeadline = request.getParameter("deadline");
 		String priority = request.getParameter("priority");
+		
+		// タイトル, コンテンツに含まれるHTML特殊文字をエスケープする
+		EscapeCharacterLogic ecpCharLgcBo = new EscapeCharacterLogic();
+		title = ecpCharLgcBo.execute(title);
+		contents = ecpCharLgcBo.execute(contents);
 		
 		// deadlineをDate型へ変換
 		Date dateDeadline = null;
