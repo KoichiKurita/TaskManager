@@ -134,7 +134,12 @@ public class RegisterUserServlet extends HttpServlet {
 		
 		// 入力チェックでエラーがない場合にのみデータベースでの検索を行い、処理のオーバーヘッドを減少させる
 		if (errorMessageMap.get("userId").size() != 0 || errorMessageMap.get("passWord").size() != 0 || errorMessageMap.get("passWordConfirm").size() != 0) {
-			// 入力チェックでエラーがある場合（エラーメッセージがある場合）	
+			// 入力チェックでエラーがある場合（エラーメッセージがある場合）
+			
+			// リクエストスコープにユーザID, パスワード, 確認用パスワードを保存
+			request.setAttribute("requestUserId", userId);
+			request.setAttribute("requestPassWord", passWord);
+			request.setAttribute("requestPassWordConfirm", passWordConfirm);
 			
 			// registerUserForm.jspをフォワード先へ指定する
 			forwardPath = "WEB-INF/jsp/registerUserForm.jsp";

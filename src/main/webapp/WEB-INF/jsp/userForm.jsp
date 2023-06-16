@@ -83,8 +83,9 @@
 	<%-- ユーザIDが登録できず、入力画面に戻ってきたとき --%>
 	<c:otherwise>
 		<%-- エラーメッセージがある場合は表示する --%>
-		<c:forEach var="errorMessage" items="${errorMessageMap.get('passWord')}" >			
-			<span style="color: red;"><c:out value="${ errorMessage }" /></span><br>
+		<c:forEach var="errorMessage" items="${errorMessageMap.get('passWord')}" >	
+			<%-- <c:out>タグを使用すると、HTML特殊文字は自動的にエスケープされるため、ここでは<c:out>タグは使用していない --%>
+			<span style="color: red;">${ errorMessage }</span><br>
 		</c:forEach>
 	</c:otherwise>
 </c:choose>
