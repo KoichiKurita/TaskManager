@@ -1,0 +1,24 @@
+# TaskManager 認証情報の設定ファイル（サンプル）
+#
+# このファイルをコピーして taskmanager.properties という名前で、
+# サーバーの /opt/tomcat/conf/ に置く（Tomcat上では ${catalina.base}/conf/taskmanager.properties を読み込む）
+#
+#   sudo cp taskmanager.properties.sample /opt/tomcat/conf/taskmanager.properties
+#   sudo chown root:tomcat /opt/tomcat/conf/taskmanager.properties
+#   sudo chmod 640 /opt/tomcat/conf/taskmanager.properties
+#
+# 注意
+# - 本物の値を入れたファイルは Git・クラウドストレージに置かないこと
+# - 値の前後に空白を入れないこと
+# - 値に \ を含む場合は \\ と書くこと（Properties形式のエスケープ）
+# - hash.algorithm と hash.fixedsalt は、既存ユーザーのパスワードハッシュと一致させる必要があるため、
+#   一度決めたら絶対に変更しないこと（変えると全ユーザーがログインできなくなる）
+
+# DB接続情報
+db.url=jdbc:mysql://localhost:3306/links_prog_exercise?useUnicode=true&characterEncoding=utf8
+db.user=taskmanager
+db.password=CHANGE_ME
+
+# パスワードハッシュ化情報
+hash.algorithm=CHANGE_ME
+hash.fixedsalt=CHANGE_ME

@@ -1,3 +1,4 @@
 /build/
-/src/main/java/contents/AuthenticationInfo.java
 TaskManager.war
+# 本物の認証情報を入れた設定ファイルはコミットしない
+taskmanager.properties
